@@ -8,6 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Equipment/SampleEquipment.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ASampleCharacter
@@ -16,7 +17,7 @@ ASampleCharacter::ASampleCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-
+	
 	// set our turn rates for input
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
@@ -76,6 +77,18 @@ void ASampleCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ASampleCharacter::OnResetVR);
 }
 
+void ASampleCharacter::AddEquipment(class USampleEquipmentConfig* Config)
+{
+	if (Config)
+	{
+		UWorld* World = GetWorld();
+		check(World);
+		FAttachmentTransformRules Rules(EAttachmentRule::SnapToTarget, false);
+		this->Equipment = World->SpawnActor<ASampleEquipment>(*Config->Class);
+		this->Equipment->UpdateConfig(Config);
+		this->Equipment->GetMeshComponent()->AttachToComponent(GetMesh(), Rules, Config->ActorSocket);
+	}
+}
 
 void ASampleCharacter::OnResetVR()
 {

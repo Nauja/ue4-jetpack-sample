@@ -21,6 +21,9 @@ class SAMPLE_API ASampleCharacter : public ACharacter
 public:
 	ASampleCharacter();
 
+	UFUNCTION(Category = Sample, BlueprintCallable)
+	void AddEquipment(class USampleEquipmentConfig* Config);
+
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseTurnRate;
@@ -68,5 +71,9 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+private:
+	UPROPERTY(transient)
+	class ASampleEquipment* Equipment;
 };
 
